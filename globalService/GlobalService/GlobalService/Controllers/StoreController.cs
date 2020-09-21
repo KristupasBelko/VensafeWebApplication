@@ -1,49 +1,66 @@
-﻿using GlobalService.Services;
+﻿using GlobalService.Models;
+using GlobalService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Linq;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GlobalService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/StoreApi")]
     [ApiController]
     public class StoreController : ControllerBase
     {
         // POST api/<StoreController>
+        [Route("GetProductsByStoreId")]
         [HttpPost]
-        public async Task<string> Post([FromBody] string storeId)
+        public async Task<ActionResult<List<object>>> GetProductsByStoreId([FromBody] string storeId)
         {
-            try
-            {
-                var storeIp = StoreService.GetEndpointAddress(storeId);
+            var storeAddress = StoreService.GetProductServiceAddress(storeId);
 
+            if(storeAddress != null)
+            {
+                var content = StoreService.GetHttpContent(storeAddress);
                 var client = new HttpClient();
-                var jsonString = JsonConvert.SerializeObject(storeId);  
-                HttpContent content = new StringContent(jsonString);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var response = await client.GetAsync("http://localhost:49812/api/products/" + storeIp);
+                var response = await client.PostAsync("http://localhost:49812/api/Products/GetProducts", content);
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                var contents = JsonConvert.DeserializeObject<List<object>>(responseJsonString);
 
-                //Process.Start("http://10.1.1.208:3000/");
-
-                return "Opening";
+                return contents;
             }
-            catch(Exception e)
+            else
             {
-                return "No such store.";
+                return NotFound();
             }
-
+          
         }
 
-
-        [HttpGet]
-        public void Get() 
+        [Route("GetTicketByStoreId")]
+        [HttpPost]
+        public async Task<ActionResult<string>> GetTicketByStoreId(PostType dataObject)    
         {
+            var storeAddress = StoreService.GetSalesApiAddress(dataObject.StoreId);
+
+            if(storeAddress != null)
+            {
+                dataObject.StoreId = storeAddress;
+                var jsonString = JsonConvert.SerializeObject(dataObject);
+                HttpContent content = new StringContent(jsonString);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var client = new HttpClient();
+                var response = await client.PostAsync("http://localhost:49812/api/Products/GetTicket", content);
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+
+                return responseJsonString;
+            }
+            else
+            {
+               return NotFound();
+            }
         }
     }
 }

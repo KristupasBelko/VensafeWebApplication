@@ -8,14 +8,24 @@ using WebApi.Services;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet("{storeId}")]
-        public async Task<List<Group>> GetProductsByStoreId(string storeId)
+        //[HttpGet("{storeId}")]
+        //public async Task<List<Group>> GetProductsByStoreId(string storeId)
+        //{
+        //    var serviceClient = ClientService.GetProductServiceClient(storeId);
+        //    var productsInUse = await DataService.GetProductsInUse(serviceClient);
+        //    var categorizedList = DataService.FilterByGroupAndBrand(productsInUse);
+
+        //    return categorizedList;
+        //}
+        [Route("GetProducts")]
+        [HttpPost]
+        public async Task<List<Group>> GetProductsByStoreId([FromBody] string storeAddress) 
         {
-            var serviceClient = ClientService.GetProductServiceClient(storeId);
+            var serviceClient = ClientService.GetProductServiceClient(storeAddress);
             var productsInUse = await DataService.GetProductsInUse(serviceClient);
             var categorizedList = DataService.FilterByGroupAndBrand(productsInUse);
 
@@ -23,6 +33,7 @@ namespace WebApi.Controllers
         }
 
         // POST api/<ProductsController>
+        [Route("GetTicket")]
         [HttpPost]
         public async Task<string> Post(PostType dataObject)           
         {
