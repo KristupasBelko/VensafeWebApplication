@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../Actions/actions";
-import CartData from "../../Data/cartData";
 import {
   Grid,
   List,
@@ -26,6 +25,7 @@ import AddIcon from "@material-ui/icons/Add";
 import SearchIcon from "@material-ui/icons/Search";
 import StarIcon from "@material-ui/icons/Star";
 import history from "../../history";
+import { store } from "../../Actions/store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,7 +66,7 @@ function ItemSelection({ ownProps, fetchAsync }) {
 
   useEffect(() => {
     loadProducts();
-
+    console.log("state of store is - ", store.getState());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,32 +90,38 @@ function ItemSelection({ ownProps, fetchAsync }) {
 
   const initializeLocalStorage = () => {
     //window.localStorage.clear();
-    let productsFromStorage = [];
     const lengthOfStorage = window.localStorage.length;
-    let mostlyBoughtproducts = [];
 
     if (lengthOfStorage > 0) {
-      for (var i = 0; i < lengthOfStorage; i++) {
-        const productsByIndex = JSON.parse(
-          window.localStorage.getItem(i.toString())
-        );
-
-        productsFromStorage = [...productsFromStorage, ...productsByIndex];
-      }
-
-      productsFromStorage.forEach((productInStorage) => {
-        if (
-          countOccurrences(productsFromStorage, productInStorage) > 3 &&
-          !mostlyBoughtproducts.some(
-            (product) => product.productCode === productInStorage.productCode
-          )
-        ) {
-          mostlyBoughtproducts.push(productInStorage);
-        }
-      });
-
-      setFavoriteProducts(mostlyBoughtproducts);
+      setFavoriteProducts(getProductsFromLocalStorage(lengthOfStorage));
     }
+  };
+
+  const getProductsFromLocalStorage = (lengthOfStorage) => {
+    //window.localStorage.clear();
+    let productsFromStorage = [];
+    let mostlyBoughtproducts = [];
+
+    for (var i = 0; i < lengthOfStorage; i++) {
+      const productsByIndex = JSON.parse(
+        window.localStorage.getItem(i.toString())
+      );
+
+      productsFromStorage = [...productsFromStorage, ...productsByIndex];
+    }
+
+    productsFromStorage.forEach((productInStorage) => {
+      if (
+        countOccurrences(productsFromStorage, productInStorage) > 3 &&
+        !mostlyBoughtproducts.some(
+          (product) => product.productCode === productInStorage.productCode
+        )
+      ) {
+        mostlyBoughtproducts.push(productInStorage);
+      }
+    });
+
+    return mostlyBoughtproducts;
   };
 
   const countOccurrences = (array, value) => {
@@ -124,19 +130,30 @@ function ItemSelection({ ownProps, fetchAsync }) {
     }, 0);
   };
 
-  const loadProducts = () => {
-    fetchAsync()
-      .then((response) => {
-        setGroups(response.data);
-        setLoading(false);
-        initializeLocalStorage();
-        console.log("products fetched:", response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        history.push("/");
-      });
-  };
+  function loadProducts() {
+    if (store.getState().products.length === 0) {
+      fetchAsync()
+        .then((response) => {
+          setGroups(response.data);
+          setLoading(false);
+          initializeLocalStorage();
+          console.log("products fetched:", response.data);
+
+          store.dispatch({
+            type: "FETCH_ALL",
+            payload: response.data,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          history.push("/");
+        });
+    } else {
+      setGroups(store.getState().products);
+      setLoading(false);
+      initializeLocalStorage();
+    }
+  }
 
   const handleGroupCollapse = (index) => {
     setIsGroupOpen({ [index]: !isGroupOpen[index] });
@@ -155,7 +172,11 @@ function ItemSelection({ ownProps, fetchAsync }) {
   };
 
   const addProductToCart = (product) => {
-    CartData.setData(product);
+    store.dispatch({
+      type: "CART_DATA",
+      payload: [...store.getState().productsInCart, product],
+    });
+
     ownProps.onIncrement();
   };
 

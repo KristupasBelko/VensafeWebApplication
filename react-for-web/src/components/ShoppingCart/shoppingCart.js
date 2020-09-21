@@ -21,12 +21,12 @@ import * as actions from "../../Actions/actions";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import CartData from "../../Data/cartData";
 import EmptyCart from "@material-ui/icons/RemoveShoppingCart";
 import BackgroundImg from "../../icons/background.png";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShopRoundedIcon from "@material-ui/icons/ShopRounded";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
+import { store } from "../../Actions/store";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -98,7 +98,7 @@ function Cart({ barcode64, createTicket }) {
   }, [productArray]);
 
   useEffect(() => {
-    setList(CartData.getData());
+    setList(store.getState().productsInCart);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -163,8 +163,11 @@ function Cart({ barcode64, createTicket }) {
   };
 
   const goToItemSelection = () => {
-    const type = "LIST";
-    CartData.setData(productArray, type);
+    store.dispatch({
+      type: "CART_DATA",
+      payload: productArray,
+    });
+
     history.push("/mainPage");
   };
 
@@ -341,7 +344,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  createTicket: actions.create,
+  createTicket: actions.createTicketAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

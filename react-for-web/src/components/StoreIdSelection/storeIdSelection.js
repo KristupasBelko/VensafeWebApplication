@@ -1,6 +1,4 @@
-import React, { Component, useState } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../Actions/actions";
+import React, { useState } from "react";
 import BackgroundImg from "../../icons/background.png";
 import {
   Grid,
@@ -12,8 +10,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import InsertCommentIcon from "@material-ui/icons/InsertComment";
-import StoreId from "../../Data/storeId";
 import history from "../../history";
+import { store } from "../../Actions/store";
 
 const useStyles = makeStyles(() => ({
   fullScreen: {
@@ -34,14 +32,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function StoreIdSelection({ findStoreFromApi }) {
+function StoreIdSelection() {
   const classes = useStyles();
   const [txtField, setTxtField] = useState("");
 
   const findStore = () => {
     console.log(txtField);
 
-    StoreId.setData(txtField);
+    store.dispatch({
+      type: "STORE_ID",
+      payload: txtField,
+    });
+
+    //StoreId.setData(txtField);
     history.push("/mainPage");
   };
 
@@ -90,14 +93,4 @@ function StoreIdSelection({ findStoreFromApi }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    barcode64: state.base64,
-  };
-};
-
-const mapDispatchToProps = {
-  findStoreFromApi: actions.findStoreAsync,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(StoreIdSelection);
+export default StoreIdSelection;

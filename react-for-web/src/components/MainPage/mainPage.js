@@ -3,14 +3,14 @@ import NavBar from "../NavBar/navBar";
 import ItemsSelection from "../itemSelection/itemSelection";
 import BackgroundImg from "../../icons/background.png";
 import { Grid } from "@material-ui/core";
-import CartData from "../../Data/cartData";
+import { store } from "../../Actions/store";
 
 function MainPage() {
   const [quantityInCart, setQuantityInCart] = useState(0);
 
   useEffect(() => {
-    const cartData = CartData.getData();
-    const productsCountInCart = Object.keys(cartData).length;
+    const productsCountInCart = Object.keys(store.getState().productsInCart)
+      .length;
 
     setQuantityInCart(productsCountInCart);
   }, []);
