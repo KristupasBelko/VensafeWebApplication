@@ -7,9 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Text.RegularExpressions;
-using System.Xml.Serialization;
-
 namespace ProductService
 {
     
@@ -29,14 +26,14 @@ namespace ProductService
         
         [System.ServiceModel.OperationContractAttribute(Action="http://webservices.vensafe.com/zervio/ProductService_v1/GetProductsInStock", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        System.Threading.Tasks.Task<ProductService.StockData[]> GetProductsInStockAsync(string[] eanCodes);
+        System.Threading.Tasks.Task<ProductService.GetProductsInStockResponse> GetProductsInStockAsync(ProductService.GetProductsInStockRequest request);
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://webservices.vensafe.com/zervio/ProductService_v1")]
-    public partial class UpdateEanByEan
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1")]
+    public partial class UpdateEanByEanRequestBody
     {
         
         private string oldEanField;
@@ -44,8 +41,6 @@ namespace ProductService
         private string newEanField;
         
         private bool replaceField;
-        
-        private bool replaceFieldSpecified;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
@@ -86,20 +81,6 @@ namespace ProductService
             set
             {
                 this.replaceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool replaceSpecified
-        {
-            get
-            {
-                return this.replaceFieldSpecified;
-            }
-            set
-            {
-                this.replaceFieldSpecified = value;
             }
         }
     }
@@ -254,6 +235,118 @@ namespace ProductService
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1")]
+    public partial class BrandType
+    {
+        
+        private int idField;
+        
+        private string nameField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        public int Id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        public string Name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1")]
+    public partial class GroupType
+    {
+        
+        private int idField;
+        
+        private string nameField;
+        
+        private int ageLimitField;
+        
+        private bool isAnonymousField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        public int Id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        public string Name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
+        public int AgeLimit
+        {
+            get
+            {
+                return this.ageLimitField;
+            }
+            set
+            {
+                this.ageLimitField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=3)]
+        public bool IsAnonymous
+        {
+            get
+            {
+                return this.isAnonymousField;
+            }
+            set
+            {
+                this.isAnonymousField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1")]
     public partial class ProductType
     {
         
@@ -274,13 +367,13 @@ namespace ProductService
         private CurrencyType currencyField;
         
         private bool currencyFieldSpecified;
-
-        private GroupObject groupField;   
         
-        private BrandObject brandField;
-
+        private GroupType groupField;
+        
+        private BrandType brandField;
+        
         private int stockField;
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
         public string ProductCode
@@ -392,133 +485,7 @@ namespace ProductService
                 this.currencyField = value;
             }
         }
-
-
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 7)]
-        public GroupObject Group 
-        {
-            get
-            {
-                return this.groupField;
-            }
-            set
-            {
-                this.groupField = value;
-            }
-        } 
-
-        public class GroupObject
-        {
-
-            private int idField;
-
-            private string nameField;
-
-            private int ageLimitField;
-
-            [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1, ElementName ="Id")]
-            public int GroupId
-            {
-                get
-                {
-                    return this.idField;
-                }
-                set
-                {
-                    this.idField = value;
-                }
-            }
-
-            [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 2, ElementName ="Name")]
-            public string GroupName
-            {
-                get
-                {
-                    return this.nameField;
-                }
-                set
-                {
-                    this.nameField = value;
-                }
-            }
-            
-            [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 3)]
-            public int AgeLimit
-            {
-                get
-                {
-                    return this.ageLimitField;
-                }
-                set
-                {
-                    this.ageLimitField = value;
-                }
-            }
-
-        }
         
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 8)]
-        public BrandObject Brand 
-        {
-            get
-            {
-                return this.brandField;
-            }
-            set
-            {
-                this.brandField = value;
-            }
-        }
-
-        public class BrandObject
-        {
-
-            private int idField;
-
-            private string nameField;
-
-
-            [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 1, ElementName ="Id")]
-            public int BrandId
-            {
-                get
-                {
-                    return this.idField;
-                }
-                set
-                {
-                    this.idField = value;
-                }
-            }
-
-            [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 2, ElementName = "Name")]
-            public string BrandName
-            {
-                get
-                {
-                    return this.nameField;
-                }
-                set
-                {
-                    this.nameField = value;
-                }
-            }
-        }
-
-
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 9)]
-        public int Stock
-        {
-            get
-            {
-                return this.stockField;
-            }
-            set
-            {
-                this.stockField = value;
-            }
-        }
-
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CurrencySpecified
@@ -530,6 +497,48 @@ namespace ProductService
             set
             {
                 this.currencyFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=7)]
+        public GroupType Group
+        {
+            get
+            {
+                return this.groupField;
+            }
+            set
+            {
+                this.groupField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=8)]
+        public BrandType Brand
+        {
+            get
+            {
+                return this.brandField;
+            }
+            set
+            {
+                this.brandField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=9)]
+        public int Stock
+        {
+            get
+            {
+                return this.stockField;
+            }
+            set
+            {
+                this.stockField = value;
             }
         }
     }
@@ -548,7 +557,7 @@ namespace ProductService
         private int quantityInStockField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
         public string EAN
         {
             get
@@ -562,7 +571,7 @@ namespace ProductService
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
         public string ProductCode
         {
             get
@@ -684,13 +693,13 @@ namespace ProductService
     {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1", Order=0)]
-        public ProductService.UpdateEanByEan UpdateEanByEan;
+        public ProductService.UpdateEanByEanRequestBody UpdateEanByEan;
         
         public UpdateEanByEanRequest()
         {
         }
         
-        public UpdateEanByEanRequest(ProductService.UpdateEanByEan UpdateEanByEan)
+        public UpdateEanByEanRequest(ProductService.UpdateEanByEanRequestBody UpdateEanByEan)
         {
             this.UpdateEanByEan = UpdateEanByEan;
         }
@@ -713,6 +722,48 @@ namespace ProductService
         public UpdateEanByEanResponse1(ProductService.UpdateEanByEanResponse UpdateEanByEanResponse)
         {
             this.UpdateEanByEanResponse = UpdateEanByEanResponse;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GetProductsInStock", WrapperNamespace="http://webservices.vensafe.com/zervio/ProductService_v1", IsWrapped=true)]
+    public partial class GetProductsInStockRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1", Order=0)]
+        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        public string[] eanCodes;
+        
+        public GetProductsInStockRequest()
+        {
+        }
+        
+        public GetProductsInStockRequest(string[] eanCodes)
+        {
+            this.eanCodes = eanCodes;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GetProductsInStockResponse", WrapperNamespace="http://webservices.vensafe.com/zervio/ProductService_v1", IsWrapped=true)]
+    public partial class GetProductsInStockResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://webservices.vensafe.com/zervio/ProductService_v1", Order=0)]
+        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        public ProductService.StockData[] GetProductsInStockResult;
+        
+        public GetProductsInStockResponse()
+        {
+        }
+        
+        public GetProductsInStockResponse(ProductService.StockData[] GetProductsInStockResult)
+        {
+            this.GetProductsInStockResult = GetProductsInStockResult;
         }
     }
     
@@ -770,16 +821,24 @@ namespace ProductService
             return base.Channel.UpdateEanByEanAsync(request);
         }
         
-        public System.Threading.Tasks.Task<ProductService.UpdateEanByEanResponse1> UpdateEanByEanAsync(ProductService.UpdateEanByEan UpdateEanByEan)
+        public System.Threading.Tasks.Task<ProductService.UpdateEanByEanResponse1> UpdateEanByEanAsync(ProductService.UpdateEanByEanRequestBody UpdateEanByEan)
         {
             ProductService.UpdateEanByEanRequest inValue = new ProductService.UpdateEanByEanRequest();
             inValue.UpdateEanByEan = UpdateEanByEan;
             return ((ProductService.ProductService_v1Soap)(this)).UpdateEanByEanAsync(inValue);
         }
         
-        public System.Threading.Tasks.Task<ProductService.StockData[]> GetProductsInStockAsync(string[] eanCodes)
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<ProductService.GetProductsInStockResponse> ProductService.ProductService_v1Soap.GetProductsInStockAsync(ProductService.GetProductsInStockRequest request)
         {
-            return base.Channel.GetProductsInStockAsync(eanCodes);
+            return base.Channel.GetProductsInStockAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<ProductService.GetProductsInStockResponse> GetProductsInStockAsync(string[] eanCodes)
+        {
+            ProductService.GetProductsInStockRequest inValue = new ProductService.GetProductsInStockRequest();
+            inValue.eanCodes = eanCodes;
+            return ((ProductService.ProductService_v1Soap)(this)).GetProductsInStockAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -823,11 +882,11 @@ namespace ProductService
         {
             if ((endpointConfiguration == EndpointConfiguration.ProductService_v1Soap))
             {
-                return new System.ServiceModel.EndpointAddress("http://10.1.1.86/WebServices/ProductService_v1.asmx");
+                return new System.ServiceModel.EndpointAddress("http://localhost:8084/webservicesnew/productservice_v1.asmx");
             }
             if ((endpointConfiguration == EndpointConfiguration.ProductService_v1Soap12))
             {
-                return new System.ServiceModel.EndpointAddress("http://10.1.1.86/WebServices/ProductService_v1.asmx");
+                return new System.ServiceModel.EndpointAddress("http://localhost:8084/webservicesnew/productservice_v1.asmx");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
@@ -1659,11 +1718,11 @@ namespace ProductService
         {
             if ((endpointConfiguration == EndpointConfiguration.ProductService_v1_Soap))
             {
-                return new System.ServiceModel.EndpointAddress("http://10.1.1.86/WebServices/ProductService_v1.asmx");
+                return new System.ServiceModel.EndpointAddress("http://localhost:8084/webservicesnew/productservice_v1.asmx");
             }
             if ((endpointConfiguration == EndpointConfiguration.ProductService_v1_Soap1))
             {
-                return new System.ServiceModel.EndpointAddress("http://10.1.1.86/WebServices/ProductService_v1.asmx");
+                return new System.ServiceModel.EndpointAddress("http://localhost:8084/webservicesnew/productservice_v1.asmx");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

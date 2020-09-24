@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "36kIuQH4MRkWLMNr1IyYr5H/pJQn0YigfBgP3Tql/kHNzfqTGuIKrl44A8g1iv3iIcUSET37f8rQqMyzKWpH8w==",
+  "dgSpecHash": "T4JXKE/6STh+vIUJbUv9854aBncX2GwXq6Eu6aSnlF8qSe5vNfr+Sk6Yeo3OTO/zZTGqXGZffmCviNws2vZb7Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\k.belko\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.2.0\\microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",
@@ -79,7 +78,7 @@
     "C:\\Users\\k.belko\\.nuget\\packages\\system.private.servicemodel\\4.7.0\\system.private.servicemodel.4.7.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.dispatchproxy\\4.5.0\\system.reflection.dispatchproxy.4.5.0.nupkg.sha512",
-    "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
+    "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.emit\\4.3.0\\system.reflection.emit.4.3.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.emit.ilgeneration\\4.3.0\\system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.emit.lightweight\\4.3.0\\system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\system.reflection.extensions\\4.3.0\\system.reflection.extensions.4.3.0.nupkg.sha512",

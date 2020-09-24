@@ -1,7 +1,8 @@
 import ProductApi from "./api";
+
 export const ACTION_TYPES = {
   CREATE_TICKET: "CREATE_TICKET",
-  FETCH_ALL: "FETCH_ALL",
+  FETCH_PRODUCTS: "FETCH_PRODUCTS",
   CART_DATA: "CART_DATA",
   STORE_ID: "STORE_ID",
 };
@@ -17,8 +18,6 @@ export const createTicketAsync = (data) => {
       StoreId: getState().storeId,
     };
 
-    console.log("new data", newData);
-
     ProductApi()
       .buyProducts(newData)
       .then((response) => {
@@ -26,9 +25,6 @@ export const createTicketAsync = (data) => {
           type: ACTION_TYPES.CREATE_TICKET,
           payload: response.data,
         });
-
-        console.log("barcode yra toksai:", response.data);
-        console.log("barcode yra toksai:", getState());
       })
       .catch((err) => console.log(err));
   };

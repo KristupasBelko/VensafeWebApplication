@@ -6,15 +6,15 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import StrongpointLogo from "../../icons/strong.logo.png";
 
 const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(17),
-  },
   appBar: {
     backgroundColor: "#396480",
   },
   logo: {
-    width: "40%",
-    height: "auto",
+    height: "40%",
+    position: "absolute",
+    right: "5%",
+    background: "transparent no-repeat center",
+    backgroundSize: "cover",
   },
 }));
 

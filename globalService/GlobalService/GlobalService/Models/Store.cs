@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace GlobalService.Models
 {
-    public partial class Stores
+    public class Store  
     {
         public int Id { get; set; }
         public string StoreId { get; set; }

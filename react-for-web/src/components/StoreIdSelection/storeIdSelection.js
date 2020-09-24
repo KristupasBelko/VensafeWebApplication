@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import BackgroundImg from "../../icons/background.png";
 import {
   Grid,
   IconButton,
@@ -12,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InsertCommentIcon from "@material-ui/icons/InsertComment";
 import history from "../../history";
 import { store } from "../../Actions/store";
+import { ACTION_TYPES } from "../../Actions/actions";
 
 const useStyles = makeStyles(() => ({
   fullScreen: {
@@ -40,7 +40,7 @@ function StoreIdSelection() {
     console.log(txtField);
 
     store.dispatch({
-      type: "STORE_ID",
+      type: ACTION_TYPES.STORE_ID,
       payload: txtField,
     });
 
@@ -49,12 +49,7 @@ function StoreIdSelection() {
   };
 
   return (
-    <Grid
-      container
-      direction="column"
-      className={classes.fullScreen}
-      style={{ backgroundImage: `url(${BackgroundImg})` }}
-    >
+    <Grid container direction="column" className={classes.fullScreen}>
       <Grid
         container
         direction="column"
@@ -64,6 +59,7 @@ function StoreIdSelection() {
       >
         <Card
           style={{
+            width: "80%",
             backgroundColor: "#fafaff",
           }}
         >
@@ -72,6 +68,7 @@ function StoreIdSelection() {
               <InsertCommentIcon className={classes.blueColor} />
             </IconButton>
             <InputBase
+              style={{ width: "80%" }}
               className={classes.blueColor}
               onChange={(e) => setTxtField(e.target.value)}
               placeholder="Insert Store Id"

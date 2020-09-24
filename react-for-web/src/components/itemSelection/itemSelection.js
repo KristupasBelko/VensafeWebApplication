@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../Actions/actions";
+import { ACTION_TYPES, fetchAsync } from "../../Actions/actions";
 import {
   Grid,
   List,
@@ -28,18 +28,12 @@ import history from "../../history";
 import { store } from "../../Actions/store";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
   nested: {
     paddingLeft: theme.spacing(3),
   },
   card: {
-    width: 300,
+    width: "100%",
     position: "relative",
-    maxHeight: 480,
     backgroundColor: "#f7f5f5",
   },
   fullScreen: {
@@ -51,12 +45,18 @@ const useStyles = makeStyles((theme) => ({
   blueColor: {
     color: "#305f7a",
   },
+  center: {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+  },
 }));
 
 function ItemSelection({ ownProps, fetchAsync }) {
   const classes = useStyles();
   const [isGroupOpen, setIsGroupOpen] = useState(true);
   const [isBrandOpen, setIsBrandOpen] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [openFavorite, setOpenFavorite] = useState(false);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [search, setSearch] = useState("");
@@ -66,7 +66,6 @@ function ItemSelection({ ownProps, fetchAsync }) {
 
   useEffect(() => {
     loadProducts();
-    console.log("state of store is - ", store.getState());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -115,11 +114,23 @@ function ItemSelection({ ownProps, fetchAsync }) {
         countOccurrences(productsFromStorage, productInStorage) > 3 &&
         !mostlyBoughtproducts.some(
           (product) => product.productCode === productInStorage.productCode
-        )
+        ) &&
+        store
+          .getState()
+          .products.some((group) =>
+            group.brands.find((brand) =>
+              brand.products.find(
+                (product) =>
+                  product.productCode === productInStorage.productCode
+              )
+            )
+          )
       ) {
         mostlyBoughtproducts.push(productInStorage);
       }
     });
+
+    console.log("mostlybought products", mostlyBoughtproducts);
 
     return mostlyBoughtproducts;
   };
@@ -130,19 +141,21 @@ function ItemSelection({ ownProps, fetchAsync }) {
     }, 0);
   };
 
-  function loadProducts() {
+  const loadProducts = () => {
     if (store.getState().products.length === 0) {
       fetchAsync()
         .then((response) => {
           setGroups(response.data);
           setLoading(false);
-          initializeLocalStorage();
+
           console.log("products fetched:", response.data);
 
           store.dispatch({
-            type: "FETCH_ALL",
+            type: ACTION_TYPES.FETCH_PRODUCTS,
             payload: response.data,
           });
+
+          initializeLocalStorage();
         })
         .catch((err) => {
           console.log(err);
@@ -153,7 +166,7 @@ function ItemSelection({ ownProps, fetchAsync }) {
       setLoading(false);
       initializeLocalStorage();
     }
-  }
+  };
 
   const handleGroupCollapse = (index) => {
     setIsGroupOpen({ [index]: !isGroupOpen[index] });
@@ -171,53 +184,52 @@ function ItemSelection({ ownProps, fetchAsync }) {
     setOpenFavorite(true);
   };
 
-  const addProductToCart = (product) => {
-    store.dispatch({
-      type: "CART_DATA",
-      payload: [...store.getState().productsInCart, product],
-    });
+  const addProductToCart = (product, index) => {
+    if (
+      product.stock > countOccurrences(store.getState().productsInCart, product)
+    ) {
+      store.dispatch({
+        type: ACTION_TYPES.CART_DATA,
+        payload: [...store.getState().productsInCart, product],
+      });
 
-    ownProps.onIncrement();
+      console.log("products in cart:", store.getState().productsInCart);
+
+      ownProps.onIncrement();
+    } else {
+      setIsButtonDisabled({ [index]: true });
+    }
   };
 
   return (
-    <Grid
-      className={classes.fullScreen}
-      container
-      justify="center"
-      alignContent="center"
-    >
+    <Grid className={classes.fullScreen}>
       {loading || groups === undefined ? (
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CircularProgress style={{ color: "white" }} />
+        <div>
+          <CircularProgress
+            className={classes.center}
+            style={{ color: "white" }}
+          />
         </div>
       ) : (
         <Grid>
-          <Box mb={2}>
+          <Box m={2}>
             <Card
               style={{
                 backgroundColor: "#fafaff",
               }}
             >
-              <Grid container direction="row">
-                <IconButton disabled>
-                  <SearchIcon className={classes.blueColor} />
-                </IconButton>
-                <InputBase
-                  className={classes.blueColor}
-                  style={{
-                    width: 200,
-                  }}
-                  placeholder="Search For Brand"
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+              <Grid container direction="row" justify="space-between">
+                <Grid>
+                  <IconButton disabled>
+                    <SearchIcon className={classes.blueColor} />
+                  </IconButton>
+                  <InputBase
+                    className={classes.blueColor}
+                    placeholder="Search For Brand"
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </Grid>
+
                 <IconButton onClick={() => openFavoriteProducts()}>
                   <Badge
                     badgeContent={Object.keys(favoriteProducts).length}
@@ -270,7 +282,10 @@ function ItemSelection({ ownProps, fetchAsync }) {
                                 />
 
                                 <IconButton
-                                  onClick={() => addProductToCart(favProd)}
+                                  disabled={isButtonDisabled[index]}
+                                  onClick={() =>
+                                    addProductToCart(favProd, index)
+                                  }
                                   variant="contained"
                                   color="primary"
                                 >
@@ -288,193 +303,205 @@ function ItemSelection({ ownProps, fetchAsync }) {
             </Card>
           </Box>
 
-          <Card
-            style={{
-              backgroundColor: "#fafaff",
-            }}
-            className={classes.card}
-          >
-            <Grid>
-              {
-                <List
-                  component="nav"
-                  aria-label="main mailbox folders"
-                  style={{ overflow: "auto", height: 380 }}
-                >
-                  {filteredGroups.map((group, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <ListItem
-                          button
-                          component="a"
-                          onClick={() => handleGroupCollapse(index)}
-                          variant="contained"
-                          color="primary"
-                        >
-                          <ListItemText
-                            primary={
-                              <Typography
-                                className={classes.blueColor}
-                                style={{
-                                  fontWeight: "bold",
-                                }}
-                                variant="button"
-                                display="block"
-                                gutterBottom
-                              >
-                                {group.groupName}
-                              </Typography>
-                            }
-                          />
-                          {isGroupOpen[index] ? (
-                            <ExpandLess className={classes.blueColor} />
-                          ) : (
-                            <ExpandMore className={classes.blueColor} />
-                          )}
-                        </ListItem>
+          <Box m={2}>
+            <Card
+              style={{
+                backgroundColor: "#fafaff",
+              }}
+              className={classes.card}
+            >
+              <Grid>
+                {
+                  <List
+                    component="nav"
+                    aria-label="main mailbox folders"
+                    style={{ overflow: "auto", height: 380 }}
+                  >
+                    {filteredGroups.map((group, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <ListItem
+                            button
+                            component="a"
+                            onClick={() => handleGroupCollapse(index)}
+                            variant="contained"
+                            color="primary"
+                          >
+                            <ListItemText
+                              primary={
+                                <Typography
+                                  className={classes.blueColor}
+                                  style={{
+                                    fontWeight: "bold",
+                                  }}
+                                  variant="button"
+                                  display="block"
+                                  gutterBottom
+                                >
+                                  {group.groupName}
+                                </Typography>
+                              }
+                            />
+                            {isGroupOpen[index] ? (
+                              <ExpandLess className={classes.blueColor} />
+                            ) : (
+                              <ExpandMore className={classes.blueColor} />
+                            )}
+                          </ListItem>
 
-                        <Collapse
-                          in={isGroupOpen[index]}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <List>
-                            {group.brands.map((brand, index) => {
-                              return (
-                                <Grid key={index}>
-                                  {brand.brandName
-                                    .toLowerCase()
-                                    .includes(search.toLowerCase()) && (
-                                    <Grid>
-                                      <ListItem
-                                        key={index}
-                                        button
-                                        className={classes.nested}
-                                        onClick={() =>
-                                          handleBrandCollapse(index)
-                                        }
-                                      >
-                                        <ListItemText
-                                          primary={
-                                            <Typography
-                                              className={classes.blueColor}
-                                              style={{
-                                                fontSize: 14,
-                                              }}
-                                              variant="overline"
-                                              gutterBottom
-                                            >
-                                              {brand.brandName}
-                                            </Typography>
+                          <Collapse
+                            in={isGroupOpen[index]}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <List>
+                              {group.brands.map((brand, index) => {
+                                return (
+                                  <Grid key={index}>
+                                    {brand.brandName
+                                      .toLowerCase()
+                                      .includes(search.toLowerCase()) && (
+                                      <Grid>
+                                        <ListItem
+                                          key={index}
+                                          button
+                                          className={classes.nested}
+                                          onClick={() =>
+                                            handleBrandCollapse(index)
                                           }
-                                        />
-                                        {isBrandOpen[index] ? (
-                                          <ExpandLess
-                                            className={classes.blueColor}
+                                        >
+                                          <ListItemText
+                                            primary={
+                                              <Typography
+                                                className={classes.blueColor}
+                                                style={{
+                                                  fontSize: 14,
+                                                }}
+                                                variant="overline"
+                                                gutterBottom
+                                              >
+                                                {brand.brandName}
+                                              </Typography>
+                                            }
                                           />
-                                        ) : (
-                                          <ExpandMore
-                                            className={classes.blueColor}
-                                          />
-                                        )}
-                                      </ListItem>
-                                      <Collapse
-                                        in={isBrandOpen[index]}
-                                        timeout="auto"
-                                        unmountOnExit
-                                      >
-                                        {
-                                          <List>
-                                            {brand.products.map(
-                                              (product, index) => {
-                                                return (
-                                                  <Grid key={index}>
-                                                    <ListItem
-                                                      className={classes.nested}
-                                                    >
-                                                      <ListItemText
-                                                        primary={
-                                                          <Grid>
-                                                            <Grid
-                                                              container
-                                                              direction="row"
-                                                              justify="space-between"
-                                                            >
+                                          {isBrandOpen[index] ? (
+                                            <ExpandLess
+                                              className={classes.blueColor}
+                                            />
+                                          ) : (
+                                            <ExpandMore
+                                              className={classes.blueColor}
+                                            />
+                                          )}
+                                        </ListItem>
+                                        <Collapse
+                                          in={isBrandOpen[index]}
+                                          timeout="auto"
+                                          unmountOnExit
+                                        >
+                                          {
+                                            <List>
+                                              {brand.products.map(
+                                                (product, index) => {
+                                                  return (
+                                                    <Grid key={index}>
+                                                      <ListItem
+                                                        className={
+                                                          classes.nested
+                                                        }
+                                                      >
+                                                        <ListItemText
+                                                          primary={
+                                                            <Grid>
+                                                              <Grid
+                                                                container
+                                                                direction="row"
+                                                                justify="space-between"
+                                                              >
+                                                                <div
+                                                                  className={
+                                                                    classes.blueColor
+                                                                  }
+                                                                  style={{
+                                                                    fontWeight:
+                                                                      "bold",
+                                                                  }}
+                                                                >
+                                                                  {
+                                                                    product.productName
+                                                                  }
+                                                                </div>
+                                                                <div
+                                                                  className={
+                                                                    classes.blueColor
+                                                                  }
+                                                                >
+                                                                  {
+                                                                    product.price
+                                                                  }{" "}
+                                                                  €
+                                                                </div>
+                                                              </Grid>
+
                                                               <div
                                                                 className={
                                                                   classes.blueColor
                                                                 }
-                                                                style={{
-                                                                  fontWeight:
-                                                                    "bold",
-                                                                }}
                                                               >
                                                                 {
-                                                                  product.productName
+                                                                  product.description
                                                                 }
-                                                              </div>
-                                                              <div
-                                                                className={
-                                                                  classes.blueColor
-                                                                }
-                                                              >
-                                                                {product.price}{" "}
-                                                                €
                                                               </div>
                                                             </Grid>
-
-                                                            <div
-                                                              className={
-                                                                classes.blueColor
-                                                              }
-                                                            >
-                                                              {
-                                                                product.description
-                                                              }
-                                                            </div>
-                                                          </Grid>
-                                                        }
-                                                      />
-
-                                                      <IconButton
-                                                        onClick={() =>
-                                                          addProductToCart(
-                                                            product
-                                                          )
-                                                        }
-                                                        variant="contained"
-                                                        color="primary"
-                                                      >
-                                                        <AddIcon
-                                                          className={
-                                                            classes.blueColor
                                                           }
                                                         />
-                                                      </IconButton>
-                                                    </ListItem>
 
-                                                    <Divider />
-                                                  </Grid>
-                                                );
-                                              }
-                                            )}
-                                          </List>
-                                        }
-                                      </Collapse>
-                                    </Grid>
-                                  )}
-                                </Grid>
-                              );
-                            })}
-                          </List>
-                        </Collapse>
-                      </React.Fragment>
-                    );
-                  })}
-                </List>
-              }
-            </Grid>
-          </Card>
+                                                        <IconButton
+                                                          disabled={
+                                                            isButtonDisabled[
+                                                              index
+                                                            ]
+                                                          }
+                                                          onClick={() =>
+                                                            addProductToCart(
+                                                              product,
+                                                              index
+                                                            )
+                                                          }
+                                                          variant="contained"
+                                                          color="primary"
+                                                        >
+                                                          <AddIcon
+                                                            className={
+                                                              classes.blueColor
+                                                            }
+                                                          />
+                                                        </IconButton>
+                                                      </ListItem>
+
+                                                      <Divider />
+                                                    </Grid>
+                                                  );
+                                                }
+                                              )}
+                                            </List>
+                                          }
+                                        </Collapse>
+                                      </Grid>
+                                    )}
+                                  </Grid>
+                                );
+                              })}
+                            </List>
+                          </Collapse>
+                        </React.Fragment>
+                      );
+                    })}
+                  </List>
+                }
+              </Grid>
+            </Card>
+          </Box>
         </Grid>
       )}
     </Grid>
@@ -489,7 +516,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  fetchAsync: () => actions.fetchAsync,
+  fetchAsync: () => fetchAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemSelection);

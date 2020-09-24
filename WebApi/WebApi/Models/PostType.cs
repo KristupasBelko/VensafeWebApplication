@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ProductService;
 
 namespace WebApi.Models
 {
     public class PostType
     {
-        public ProductService.ProductType[] Products { get; set; }
+        public ProductType[] Products { get; set; }
         public string StoreId { get; set; } 
     }
 }

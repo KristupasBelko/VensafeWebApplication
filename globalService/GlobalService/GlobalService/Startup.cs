@@ -1,5 +1,7 @@
+using GlobalService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,12 +20,13 @@ namespace GlobalService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<StoreContext>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
+
             services.AddCors();
             services.AddMvc().AddNewtonsoftJson();
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllers();
-
-            //services.AddScoped<StoreAddress, >();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

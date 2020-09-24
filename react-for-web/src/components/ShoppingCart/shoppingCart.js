@@ -15,14 +15,14 @@ import {
   IconButton,
   Divider,
   CircularProgress,
+  Box,
 } from "@material-ui/core";
 import history from "./../../history";
-import * as actions from "../../Actions/actions";
+import { createTicketAsync, ACTION_TYPES } from "../../Actions/actions";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import EmptyCart from "@material-ui/icons/RemoveShoppingCart";
-import BackgroundImg from "../../icons/background.png";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShopRoundedIcon from "@material-ui/icons/ShopRounded";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
@@ -46,19 +46,15 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     position: "relative",
   },
-  marginRight: {
-    marginRight: 190,
+  cart: {
+    position: "absolute",
+    right: "0%",
+    transform: "translate(-50%, -50%)",
   },
   center: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  centerAndTop: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 15,
   },
   fullScreen: {
     height: "100vh",
@@ -164,7 +160,7 @@ function Cart({ barcode64, createTicket }) {
 
   const goToItemSelection = () => {
     store.dispatch({
-      type: "CART_DATA",
+      type: ACTION_TYPES.CART_DATA,
       payload: productArray,
     });
 
@@ -179,19 +175,17 @@ function Cart({ barcode64, createTicket }) {
   };
 
   return (
-    <Grid
-      style={{ backgroundImage: `url(${BackgroundImg})` }}
-      className={classes.fullScreen}
-    >
-      <Grid container direction="row">
-        <Button
-          onClick={() => goToItemSelection()}
-          className={classes.marginRight}
-        >
-          <ArrowBackIcon style={{ color: "white" }} />
-        </Button>
-        <h3 style={{ color: "white" }}>CART</h3>
-      </Grid>
+    <Grid className={classes.fullScreen}>
+      <Box mt={2} mb={2}>
+        <Grid container direction="row">
+          <Button onClick={() => goToItemSelection()}>
+            <ArrowBackIcon style={{ color: "white" }} />
+          </Button>
+          <h3 style={{ color: "white" }} className={classes.cart}>
+            CART
+          </h3>
+        </Grid>
+      </Box>
 
       <Grid container className={classes.center}>
         <Card
@@ -269,27 +263,20 @@ function Cart({ barcode64, createTicket }) {
         </Card>
 
         {barcode64 === "" ? (
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            className={classes.centerAndTop}
-          >
+          <Box mt={2}>
             <div style={{ color: "white" }}>Ticket is not generated yet.</div>
-          </Grid>
+          </Box>
         ) : (
-          <div className={classes.center}>
-            <Grid className={classes.centerAndTop}>
-              <Button
-                startIcon={<ConfirmationNumberIcon />}
-                variant="outlined"
-                onClick={openTicket}
-                className={classes.ticketButton}
-              >
-                Ticket
-              </Button>
-            </Grid>
+          <Box mt={1.5}>
+            <Button
+              startIcon={<ConfirmationNumberIcon />}
+              variant="outlined"
+              onClick={openTicket}
+              className={classes.ticketButton}
+              style={{ width: "30vh" }}
+            >
+              Ticket
+            </Button>
 
             <Dialog onClose={closeTicket} open={isTicketOpen}>
               <DialogContent>
@@ -308,7 +295,7 @@ function Cart({ barcode64, createTicket }) {
                 )}
               </DialogContent>
             </Dialog>
-          </div>
+          </Box>
         )}
       </Grid>
 
@@ -344,7 +331,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  createTicket: actions.createTicketAsync,
+  createTicket: createTicketAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

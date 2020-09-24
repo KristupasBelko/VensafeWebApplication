@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../NavBar/navBar";
 import ItemsSelection from "../itemSelection/itemSelection";
-import BackgroundImg from "../../icons/background.png";
 import { Grid } from "@material-ui/core";
 import { store } from "../../Actions/store";
 
@@ -20,12 +19,9 @@ function MainPage() {
   };
 
   return (
-    <Grid style={{ backgroundImage: `url(${BackgroundImg})` }}>
+    <Grid>
       <NavBar quantityInCart={quantityInCart} />
-
-      <div>
-        <ItemsSelection onIncrement={clickAlert} />
-      </div>
+      <ItemsSelection onIncrement={clickAlert} />
     </Grid>
   );
 }

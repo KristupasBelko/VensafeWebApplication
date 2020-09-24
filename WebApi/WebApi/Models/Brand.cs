@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ProductService;
+using System.Collections.Generic;
 
 namespace WebApi.Models
 {
@@ -7,11 +8,11 @@ namespace WebApi.Models
         public int BrandId { get; set; }
         public string BrandName { get; set; }
 
-        public List<ProductService.ProductType> Products { get; set; }
+        public List<ProductType> Products { get; set; }
 
         public Brand()  
         {
-            Products = new List<ProductService.ProductType>();
+            Products = new List<ProductType>();
         }
     }
 }

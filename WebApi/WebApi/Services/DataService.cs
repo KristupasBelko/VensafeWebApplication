@@ -1,5 +1,6 @@
 ﻿using BarcodeLib.Core;
-using Newtonsoft.Json;
+using ProductService;
+using SalesApi;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,15 +14,15 @@ namespace WebApi.Services
 {
     public static class DataService
     {
-        public static List<Group> FilterByGroupAndBrand(List<ProductService.ProductType> prodList)      
+        public static List<Group> FilterByGroupAndBrand(List<ProductType> prodList)      
         {
             var groups = prodList.Select(prod => prod.Group).ToList();
             var brands = prodList.Select(prod => prod.Brand).ToList();
 
-            var distinctedGroups = groups.GroupBy(o => o.GroupId)   
+            var distinctedGroups = groups.GroupBy(o => o.Id)   
                               .Select(o => o.FirstOrDefault()).ToList();
 
-            var distinctedBrands = brands.GroupBy(o => o.BrandId)
+            var distinctedBrands = brands.GroupBy(o => o.Id)
                 .Select(o => o.FirstOrDefault()).ToList();
 
             var groupedList = new List<Group>();
@@ -29,58 +30,49 @@ namespace WebApi.Services
 
             foreach (var brand in distinctedBrands)    
             {
-                var brandID = brand.BrandId;
+                var brandID = brand.Id;
 
                 brandedList.Add(new Brand
                 {
                     BrandId = brandID,
-                    BrandName = brand.BrandName,
-                    Products = prodList.Where(product => product.Brand.BrandId == brandID).ToList(),
+                    BrandName = brand.Name,
+                    Products = prodList.Where(product => product.Brand.Id == brandID).ToList(),
                 });
             }
 
             foreach (var group in distinctedGroups)
             {
-                var groupID = group.GroupId;
+                var groupID = group.Id;
 
                 groupedList.Add(new Group
                 {
                     GroupId = groupID,
-                    GroupName = group.GroupName,
-                    Brands = brandedList.Where(brand => brand.Products.FirstOrDefault().Group.GroupId == groupID).ToList()
+                    GroupName = group.Name,
+                    Brands = brandedList.Where(brand => brand.Products.FirstOrDefault().Group.Id == groupID).ToList()
                 }) ;
             }
 
             return groupedList;
         }
 
-        public async static Task<List<ProductService.ProductType>> GetProductsInUse(ProductService.ProductService_v1_SoapClient serviceClient)
+        public async static Task<List<ProductType>> GetProductsInUse(ProductService_v1_SoapClient serviceClient)
         {
-            var productsInUse = new ProductService.GetProductsInUse();
+            var productsInUse = new GetProductsInUse();
 
             var productsResponse = await serviceClient.GetProductsInUseAsync(productsInUse);
             var products = productsResponse.GetProductsInUseResponse.Products;
-            var productInUseList = new List<ProductService.ProductType>();
+            var productInUseList = new List<ProductType>();
 
             productInUseList.AddRange(products);
 
             return productInUseList;
         }
 
-        public static int GetRandomNumber()
-        {
-            Random rnd = new Random();
-            int maxInt = 2147483647;
-            int randomNumber = rnd.Next(maxInt);
-
-            return randomNumber;
-        }
-
-        public static string GetTicketEan(SalesApi.AddResponse addResponse)
+        public static string GetTicketEan(AddResponse addResponse)
         {
             var contentObject = addResponse.Body.AddResult.Content;
-            var podBarCode = contentObject.GetType().GetProperty("PodBarcode");
-            var ticketEan = (string)(podBarCode.GetValue(contentObject, null));
+            var podBarCodeProp = contentObject.GetType().GetProperty("PodBarcode");
+            var ticketEan = (string)(podBarCodeProp.GetValue(contentObject, null));
 
             return ticketEan;
         }
@@ -102,6 +94,15 @@ namespace WebApi.Services
 
                 return base64String;
             }
+        }
+
+        public static int GetTicketNo(AddResponse addResponse)
+        {
+            var contentObject = addResponse.Body.AddResult.Content;
+            var ticketNoProp = contentObject.GetType().GetProperty("TicketNo");
+            var ticketNo = (int)(ticketNoProp.GetValue(contentObject, null));  
+
+            return ticketNo;
         }
     }
 }

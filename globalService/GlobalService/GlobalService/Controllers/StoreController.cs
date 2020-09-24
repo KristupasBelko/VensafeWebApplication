@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Linq;
-
 
 namespace GlobalService.Controllers
 {
@@ -15,47 +13,66 @@ namespace GlobalService.Controllers
     [ApiController]
     public class StoreController : ControllerBase
     {
-        // POST api/<StoreController>
+        private readonly StoreContext _context;
+
+        public StoreController(StoreContext context)
+        {
+            _context = context;
+        }
+
         [Route("GetProductsByStoreId")]
         [HttpPost]
         public async Task<ActionResult<List<object>>> GetProductsByStoreId([FromBody] string storeId)
         {
-            var storeAddress = StoreService.GetProductServiceAddress(storeId);
+            var storeAddress = StoreService.GetProductServiceAddress(storeId, _context);
 
             if(storeAddress != null)
             {
-                var content = StoreService.GetHttpContent(storeAddress);
-                var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:49812/api/Products/GetProducts", content);
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                var contents = JsonConvert.DeserializeObject<List<object>>(responseJsonString);
+                try
+                {
+                    var content = StoreService.GetHttpContent(storeAddress);
+                    var client = new HttpClient();
+                    var response = await client.PostAsync("http://localhost:49812/api/Products/GetProducts", content);
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    var deserializedContent = JsonConvert.DeserializeObject<List<object>>(responseJsonString);
 
-                return contents;
+                    return deserializedContent;
+                }
+                catch
+                {
+                    return NoContent();
+                }
             }
             else
             {
                 return NotFound();
             }
-          
         }
 
         [Route("GetTicketByStoreId")]
         [HttpPost]
         public async Task<ActionResult<string>> GetTicketByStoreId(PostType dataObject)    
         {
-            var storeAddress = StoreService.GetSalesApiAddress(dataObject.StoreId);
+            var storeAddress = StoreService.GetSalesApiAddress(dataObject.StoreId, _context);
 
             if(storeAddress != null)
             {
-                dataObject.StoreId = storeAddress;
-                var jsonString = JsonConvert.SerializeObject(dataObject);
-                HttpContent content = new StringContent(jsonString);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:49812/api/Products/GetTicket", content);
-                var responseJsonString = await response.Content.ReadAsStringAsync();
+                try
+                {
+                    dataObject.StoreId = storeAddress;
+                    var jsonString = JsonConvert.SerializeObject(dataObject);
+                    HttpContent content = new StringContent(jsonString);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var client = new HttpClient();
+                    var response = await client.PostAsync("http://localhost:49812/api/Products/GetTicket", content);
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
 
-                return responseJsonString;
+                    return responseJsonString;
+                }
+                catch
+                {
+                    return NoContent();
+                }
             }
             else
             {

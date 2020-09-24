@@ -1,6 +1,5 @@
 ﻿using GlobalService.Models;
 using Newtonsoft.Json;
-using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Linq;
@@ -9,27 +8,21 @@ namespace GlobalService.Services
 {
     public static class StoreService
     {
-
-        public static string GetProductServiceAddress(string storeId)
+        public static string GetProductServiceAddress(string storeId, StoreContext context)
         {
-            var context = new StoreContext();
-
             var query = from b in context.Stores
                         select b;
 
             return query.FirstOrDefault(item => item.StoreId == storeId)?.ProductsServiceLink;
         }
 
-        public static string GetSalesApiAddress(string storeId) 
+        public static string GetSalesApiAddress(string storeId, StoreContext context) 
         {
-            var context = new StoreContext();
-
             var query = from b in context.Stores
                         select b;
 
             return query.FirstOrDefault(item => item.StoreId == storeId)?.SalesApiLink;
         }
-
 
         public static HttpContent GetHttpContent(string storeAddress)
         {
@@ -38,12 +31,6 @@ namespace GlobalService.Services
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             return content;
-        }
-
-        public static class Stores 
-        {
-            public static string Store1 = "Store_1";
-            public static string Store2 = "Store_2";
         }
     }
 }

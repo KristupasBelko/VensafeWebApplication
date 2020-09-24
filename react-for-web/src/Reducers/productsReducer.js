@@ -1,7 +1,7 @@
 import { ACTION_TYPES } from "../Actions/actions";
 
 export const products = (state = [], action) => {
-  if (action.type === ACTION_TYPES.FETCH_ALL) {
+  if (action.type === ACTION_TYPES.FETCH_PRODUCTS) {
     return action.payload;
   }
   return state;
