@@ -20,7 +20,7 @@ import {
 import history from "./../../history";
 import { createTicketAsync, ACTION_TYPES } from "../../Actions/actions";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import EmptyCart from "@material-ui/icons/RemoveShoppingCart";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -278,19 +278,26 @@ function Cart({ barcode64, createTicket }) {
               Ticket
             </Button>
 
-            <Dialog onClose={closeTicket} open={isTicketOpen}>
+            <Dialog
+              style={{
+                postition: "absolute",
+                top: 0,
+                bottom: "auto",
+              }}
+              onClose={closeTicket}
+              open={isTicketOpen}
+            >
               <DialogContent>
                 {!isTicketNew ? (
                   <CircularProgress className={classes.blueColor} />
                 ) : (
                   <Grid container direction="column" className={classes.center}>
-                    <div>Scan this ticket</div>
-                    <ArrowDownwardIcon />
-
                     <img
                       src={`data:image/jpeg;base64,${barcode64}`}
                       alt="barcode"
                     />
+                    <ArrowUpwardIcon />
+                    <div>Scan this ticket</div>
                   </Grid>
                 )}
               </DialogContent>

@@ -6,12 +6,23 @@ import {
   Card,
   Button,
   Box,
+  Typography,
+  ButtonGroup,
+  Dialog,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import InsertCommentIcon from "@material-ui/icons/InsertComment";
+import ListIcon from "@material-ui/icons/List";
+import CropFreeIcon from "@material-ui/icons/CropFree";
 import history from "../../history";
 import { store } from "../../Actions/store";
 import { ACTION_TYPES } from "../../Actions/actions";
+import StrongpointLogo from "../../icons/strong.logo.png";
 
 const useStyles = makeStyles(() => ({
   fullScreen: {
@@ -26,15 +37,40 @@ const useStyles = makeStyles(() => ({
   button: {
     borderColor: "white",
     color: "white",
+    height: "70px",
   },
   blueColor: {
     color: "#305f7a",
+  },
+  logo: {
+    height: "5%",
+    position: "absolute",
+    top: "auto",
+    bottom: 0,
+    right: 0,
+    margin: 5,
   },
 }));
 
 function StoreIdSelection() {
   const classes = useStyles();
   const [txtField, setTxtField] = useState("");
+  const [isTypeStoreIdOpen, setIsTypeStoreIdOpen] = useState(false);
+  const [isStoreListOpen, setIsStoreListOpen] = useState(false);
+
+  const openTypeStoreId = () => {
+    setIsTypeStoreIdOpen(true);
+  };
+  const closeTypeStoreId = () => {
+    setIsTypeStoreIdOpen(false);
+  };
+
+  const openStoreList = () => {
+    setIsStoreListOpen(true);
+  };
+  const closeStoreList = () => {
+    setIsStoreListOpen(false);
+  };
 
   const findStore = () => {
     console.log(txtField);
@@ -53,39 +89,115 @@ function StoreIdSelection() {
       <Grid
         container
         direction="column"
-        justify="center"
         alignItems="center"
         className={classes.center}
       >
-        <Card
-          style={{
-            width: "80%",
-            backgroundColor: "#fafaff",
-          }}
+        <Typography
+          variant="overline"
+          style={{ fontSize: "15px", color: "white", top: 0 }}
         >
-          <Grid>
-            <IconButton disabled>
-              <InsertCommentIcon className={classes.blueColor} />
-            </IconButton>
-            <InputBase
-              style={{ width: "80%" }}
-              className={classes.blueColor}
-              onChange={(e) => setTxtField(e.target.value)}
-              placeholder="Insert Store Id"
-            />
-          </Grid>
-        </Card>
+          CHOOSE STORE:
+        </Typography>
 
-        <Box mt={2}>
+        <ButtonGroup orientation="vertical">
           <Button
             className={classes.button}
             variant="outlined"
-            onClick={() => findStore()}
+            startIcon={<CropFreeIcon />}
           >
-            Accept
+            scan qr
           </Button>
-        </Box>
+          <Button
+            onClick={() => openStoreList()}
+            className={classes.button}
+            variant="outlined"
+            startIcon={<ListIcon />}
+          >
+            Stores Nearby
+          </Button>
+          <Button
+            onClick={() => openTypeStoreId()}
+            className={classes.button}
+            variant="outlined"
+            startIcon={<InsertCommentIcon />}
+          >
+            TYPE STORE ID
+          </Button>
+        </ButtonGroup>
+
+        <Dialog onClose={closeStoreList} open={isStoreListOpen}>
+          <DialogContent
+            style={{
+              backgroundColor: "#396480",
+            }}
+          >
+            <Grid container justify="center" alignItems="center">
+              <Typography variant="overline" style={{ color: "white" }}>
+                Stores Nearby
+              </Typography>
+              <Card
+                style={{
+                  width: "200px",
+                  backgroundColor: "#fafaff",
+                }}
+              >
+                <List component="nav" aria-label="main mailbox folders">
+                  <ListItem button>
+                    <ListItemText
+                      className={classes.blueColor}
+                      primary="RIMI"
+                    />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button>
+                    <ListItemText
+                      className={classes.blueColor}
+                      primary="MAXIMA"
+                    />
+                  </ListItem>
+                </List>
+              </Card>
+            </Grid>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog onClose={closeTypeStoreId} open={isTypeStoreIdOpen}>
+          <DialogContent style={{ backgroundColor: "#396480" }}>
+            <Grid container justify="center" alignItems="center">
+              <Card
+                style={{
+                  width: "80%",
+                  backgroundColor: "#fafaff",
+                }}
+              >
+                <Grid>
+                  <IconButton disabled>
+                    <InsertCommentIcon className={classes.blueColor} />
+                  </IconButton>
+                  <InputBase
+                    style={{ width: "65%" }}
+                    className={classes.blueColor}
+                    onChange={(e) => setTxtField(e.target.value)}
+                    placeholder="Insert Store Id"
+                  />
+                </Grid>
+              </Card>
+
+              <Box mt={2}>
+                <Button
+                  style={{ color: "white", borderColor: "white" }}
+                  variant="outlined"
+                  onClick={() => findStore()}
+                >
+                  Accept
+                </Button>
+              </Box>
+            </Grid>
+          </DialogContent>
+        </Dialog>
       </Grid>
+
+      <img src={StrongpointLogo} alt="Logo" className={classes.logo} />
     </Grid>
   );
 }
