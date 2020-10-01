@@ -72,6 +72,31 @@ function StoreIdSelection() {
   const [isStoreListOpen, setIsStoreListOpen] = useState(false);
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
 
+  const openQrScanner = () => {
+    cordova.plugins.barcodeScanner.scan(
+      function (result) {
+        if (result.text !== null) {
+          store.dispatch({
+            type: ACTION_TYPES.STORE_ID,
+            payload: result.text,
+          });
+
+          history.replace("/mainPage");
+        }
+      },
+      function (error) {
+        alert("Scanning failed: " + error);
+      },
+      {
+        prompt: "SCAN QR CODE",
+        resultDisplayDuration: 0,
+      }
+    );
+  };
+  const closeQrScanner = () => {
+    setIsQrScannerOpen(false);
+  };
+
   const openTypeStoreId = () => {
     setIsTypeStoreIdOpen(true);
   };
@@ -103,6 +128,23 @@ function StoreIdSelection() {
 
     //StoreId.setData(txtField);
     history.replace("/mainPage");
+  };
+
+  const handleScan = (data) => {
+    if (data !== null) {
+      store.dispatch({
+        type: ACTION_TYPES.STORE_ID,
+        payload: data,
+      });
+
+      history.replace("/mainPage");
+    }
+
+    console.log("duomenys", data);
+  };
+
+  const handleError = (err) => {
+    console.error(err);
   };
 
   return (
@@ -146,6 +188,7 @@ function StoreIdSelection() {
 
         <ButtonGroup orientation="vertical">
           <Button
+            onClick={() => openQrScanner()}
             className={classes.button}
             variant="outlined"
             startIcon={<CropFreeIcon />}
@@ -223,7 +266,7 @@ function StoreIdSelection() {
                     style={{ width: "65%" }}
                     className={classes.blueColor}
                     onChange={(e) => setTxtField(e.target.value)}
-                    placeholder="Insert Store Id"
+                    placeholder="Store Id"
                   />
                 </Grid>
               </Card>

@@ -6,14 +6,20 @@ import Routes from "./routes";
 import { Provider } from "react-redux";
 import { store } from "./Actions/store";
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <div className="App">
-        <Routes />
-      </div>
-    </Router>
-  </Provider>,
+document.addEventListener("deviceready", onDeviceReady, false);
 
-  document.getElementById("root")
-);
+function onDeviceReady() {
+  console.log(navigator.camera);
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Routes />
+        </div>
+      </Router>
+    </Provider>,
+
+    document.getElementById("root")
+  );
+}

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kns7yMqP8hLchDKe4fSZMpEFSApEiap0NmFR4b2zV7e3ipVDVu8cHyhujv7SEYeBspPlsEXjiNvH2Uh5nl9Gig==",
+  "dgSpecHash": "Bhu1gEPbUvOw9DljLmZgggCs0cDBHdsbp0uaDWzO6WFkedLJjy9nBiUZ9Ey6ERugumvusMdqsVrK1p2EPuCDjQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj",
+  "projectFilePath": "C:\\Users\\k.belko\\Desktop\\mobile-kiosk-web\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\k.belko\\.nuget\\packages\\barcodelib.core\\1.0.9\\barcodelib.core.1.0.9.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",

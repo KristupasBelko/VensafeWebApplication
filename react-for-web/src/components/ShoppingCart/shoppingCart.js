@@ -41,8 +41,7 @@ const useStyles = makeStyles(() => ({
     position: "relative",
   },
   list: {
-    height: 320,
-    maxHeight: 320,
+    maxHeight: "65vh",
     overflow: "auto",
     position: "relative",
   },

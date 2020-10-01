@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YhJaUx6IE18haqR2WN5rZfDIfpH3F4dgD22NZwsZdYKvlncS9g2aMFVPZpkfW3e8dfV+Q0jlOycFhq08bwqTNQ==",
+  "dgSpecHash": "BCvADUuC0JC/F0SBRYi9HSPk3sVaYrQDTZNn2dFbd/t+G5cPw4UIIbyC0M09D3yfXw7i97nlzzudAGRayF6XVA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
+  "projectFilePath": "C:\\Users\\k.belko\\Desktop\\mobile-kiosk-web\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\k.belko\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
