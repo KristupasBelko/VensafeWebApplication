@@ -1,7 +1,7 @@
 import axios from "axios";
 import { store } from "./store";
 
-const baseUrl = "https://localhost:44378/api/StoreApi";
+const baseUrl = "https://10.1.18.89:5001/api/storeapi";
 
 export function ProductApi(url = baseUrl) {
   return {

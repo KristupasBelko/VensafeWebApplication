@@ -25,9 +25,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack --config webpack.config.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "watch": "webpack-dev-server --progress"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -42,6 +43,18 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cordova-android": "^9.0.0",
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
     ]
   }
 }

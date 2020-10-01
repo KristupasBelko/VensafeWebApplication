@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj": {}
+    "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj": {
+    "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
+        "projectUniqueName": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
         "projectName": "GlobalService",
-        "projectPath": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
+        "projectPath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\GlobalService.csproj",
         "packagesPath": "C:\\Users\\k.belko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\globalService\\GlobalService\\GlobalService\\obj\\",
+        "outputPath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\globalService\\GlobalService\\GlobalService\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, IconButton, Grid, Badge } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     backgroundColor: "#396480",
   },
@@ -20,7 +20,7 @@ function NavBar({ quantityInCart }) {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={() => history.push("/shoppingCart")}
+              onClick={() => history.replace("/shoppingCart")}
             >
               <Badge badgeContent={quantityInCart} color="secondary">
                 <ShoppingCartIcon />

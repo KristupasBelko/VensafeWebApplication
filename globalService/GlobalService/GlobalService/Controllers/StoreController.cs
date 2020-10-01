@@ -49,6 +49,12 @@ namespace GlobalService.Controllers
             }
         }
 
+        [HttpGet]
+        public void Get()
+        {
+
+        }
+
         [Route("GetTicketByStoreId")]
         [HttpPost]
         public async Task<ActionResult<string>> GetTicketByStoreId(PostType dataObject)    

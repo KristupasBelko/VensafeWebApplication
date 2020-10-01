@@ -19,10 +19,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import InsertCommentIcon from "@material-ui/icons/InsertComment";
 import ListIcon from "@material-ui/icons/List";
 import CropFreeIcon from "@material-ui/icons/CropFree";
+import LiveHelpIcon from "@material-ui/icons/LiveHelp";
+import CloseIcon from "@material-ui/icons/Close";
 import history from "../../history";
 import { store } from "../../Actions/store";
 import { ACTION_TYPES } from "../../Actions/actions";
 import StrongpointLogo from "../../icons/strong.logo.png";
+import InfoPicture from "../../icons/info.png";
 
 const useStyles = makeStyles(() => ({
   fullScreen: {
@@ -50,6 +53,16 @@ const useStyles = makeStyles(() => ({
     right: 0,
     margin: 5,
   },
+  info: {
+    width: "100%",
+  },
+  infoButton: {
+    position: "absolute",
+    top: 0,
+    bottom: "auto",
+    right: 0,
+    margin: 5,
+  },
 }));
 
 function StoreIdSelection() {
@@ -57,6 +70,7 @@ function StoreIdSelection() {
   const [txtField, setTxtField] = useState("");
   const [isTypeStoreIdOpen, setIsTypeStoreIdOpen] = useState(false);
   const [isStoreListOpen, setIsStoreListOpen] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
 
   const openTypeStoreId = () => {
     setIsTypeStoreIdOpen(true);
@@ -72,6 +86,13 @@ function StoreIdSelection() {
     setIsStoreListOpen(false);
   };
 
+  const openInfoDialog = () => {
+    setIsInfoDialogOpen(true);
+  };
+  const closeInfoDialog = () => {
+    setIsInfoDialogOpen(false);
+  };
+
   const findStore = () => {
     console.log(txtField);
 
@@ -81,11 +102,35 @@ function StoreIdSelection() {
     });
 
     //StoreId.setData(txtField);
-    history.push("/mainPage");
+    history.replace("/mainPage");
   };
 
   return (
     <Grid container direction="column" className={classes.fullScreen}>
+      <IconButton
+        onClick={() => openInfoDialog()}
+        className={classes.infoButton}
+      >
+        <LiveHelpIcon style={{ color: "white" }} />
+      </IconButton>
+
+      <Dialog open={isInfoDialogOpen}>
+        <DialogContent>
+          <Grid container justify="center" alignItems="center">
+            <img src={InfoPicture} alt="Info" className={classes.info} />
+            <Box mt={2}>
+              <Button
+                style={{ width: "200px" }}
+                onClick={() => closeInfoDialog()}
+                variant="outlined"
+                startIcon={<CloseIcon />}
+              >
+                Close
+              </Button>
+            </Box>
+          </Grid>
+        </DialogContent>
+      </Dialog>
       <Grid
         container
         direction="column"

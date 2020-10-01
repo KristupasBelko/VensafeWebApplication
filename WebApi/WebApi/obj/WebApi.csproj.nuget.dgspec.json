@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\k.belko\\Desktop\\VsWebApp\\WebApi\\WebApi\\WebApi.csproj": {}
+    "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\k.belko\\Desktop\\VsWebApp\\WebApi\\WebApi\\WebApi.csproj": {
+    "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\WebApi\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\WebApi\\WebApi\\WebApi.csproj",
+        "projectPath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\k.belko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\k.belko\\Desktop\\VsWebApp\\WebApi\\WebApi\\obj\\",
+        "outputPath": "C:\\Users\\k.belko\\Desktop\\New folder\\VensafeWebApplication\\WebApi\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

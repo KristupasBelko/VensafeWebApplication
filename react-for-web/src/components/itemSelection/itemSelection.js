@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  CircularProgress,
+  LinearProgress,
   Collapse,
   Divider,
   Card,
@@ -31,24 +31,22 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(3),
   },
+  fullScreen: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   card: {
-    width: "100%",
     position: "relative",
     backgroundColor: "#f7f5f5",
-  },
-  fullScreen: {
-    height: "90vh",
   },
   textField: {
     color: "white",
   },
   blueColor: {
     color: "#305f7a",
-  },
-  center: {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
   },
 }));
 
@@ -89,25 +87,20 @@ function ItemSelection({ ownProps, fetchAsync }) {
 
   const initializeLocalStorage = () => {
     //window.localStorage.clear();
-    const lengthOfStorage = window.localStorage.length;
+    const storageName = "ProductsInStorage";
+    const productsFromStorage = JSON.parse(
+      window.localStorage.getItem(storageName)
+    );
 
-    if (lengthOfStorage > 0) {
-      setFavoriteProducts(getProductsFromLocalStorage(lengthOfStorage));
+    console.log("storage inside", productsFromStorage);
+
+    if (productsFromStorage !== null) {
+      setFavoriteProducts(getProductsFromLocalStorage(productsFromStorage));
     }
   };
 
-  const getProductsFromLocalStorage = (lengthOfStorage) => {
-    //window.localStorage.clear();
-    let productsFromStorage = [];
+  const getProductsFromLocalStorage = (productsFromStorage) => {
     let mostlyBoughtproducts = [];
-
-    for (var i = 0; i < lengthOfStorage; i++) {
-      const productsByIndex = JSON.parse(
-        window.localStorage.getItem(i.toString())
-      );
-
-      productsFromStorage = [...productsFromStorage, ...productsByIndex];
-    }
 
     productsFromStorage.forEach((productInStorage) => {
       if (
@@ -159,7 +152,7 @@ function ItemSelection({ ownProps, fetchAsync }) {
         })
         .catch((err) => {
           console.log(err);
-          history.push("/");
+          history.replace("/");
         });
     } else {
       setGroups(store.getState().products);
@@ -202,13 +195,10 @@ function ItemSelection({ ownProps, fetchAsync }) {
   };
 
   return (
-    <Grid className={classes.fullScreen}>
+    <Grid>
       {loading || groups === undefined ? (
         <div>
-          <CircularProgress
-            className={classes.center}
-            style={{ color: "white" }}
-          />
+          <LinearProgress />
         </div>
       ) : (
         <Grid>
@@ -308,14 +298,17 @@ function ItemSelection({ ownProps, fetchAsync }) {
               style={{
                 backgroundColor: "#fafaff",
               }}
-              className={classes.card}
             >
-              <Grid>
+              <Grid style={{ height: "100%" }}>
                 {
                   <List
                     component="nav"
                     aria-label="main mailbox folders"
-                    style={{ overflow: "auto", height: 380 }}
+                    style={{
+                      overflow: "auto",
+                      maxHeight: "70vh",
+                      minHeight: "30vh",
+                    }}
                   >
                     {filteredGroups.map((group, index) => {
                       return (

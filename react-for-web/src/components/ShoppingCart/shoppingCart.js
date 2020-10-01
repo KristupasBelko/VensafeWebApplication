@@ -28,7 +28,7 @@ import ShopRoundedIcon from "@material-ui/icons/ShopRounded";
 import ConfirmationNumberIcon from "@material-ui/icons/ConfirmationNumber";
 import { store } from "../../Actions/store";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     top: "auto",
     bottom: 0,
@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "90%",
+    height: "65vh",
     position: "relative",
-    height: 370,
   },
   list: {
     height: 320,
@@ -56,9 +56,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  fullScreen: {
-    height: "100vh",
-  },
   ticketButton: {
     borderColor: "white",
     color: "white",
@@ -68,6 +65,11 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     top: "50%",
     transform: "translate(-50%, -50%)",
+  },
+  removeButton: {
+    position: "absolute",
+    left: "0%",
+    bottom: "0%",
   },
   blueColor: {
     color: "#305f7a",
@@ -146,16 +148,19 @@ function Cart({ barcode64, createTicket }) {
   };
 
   const insertProductsToLocalStorage = () => {
-    const arrayToString = JSON.stringify(productArray);
-    let storageName = "";
+    const storageName = "ProductsInStorage";
+    let productsInStorage = JSON.parse(
+      window.localStorage.getItem(storageName)
+    );
 
-    if (window.localStorage.length === 0) {
-      storageName = "0";
+    if (productsInStorage === null) {
+      const productArrayToString = JSON.stringify(productArray);
+      window.localStorage.setItem(storageName, productArrayToString);
     } else {
-      storageName = window.localStorage.length.toString();
+      productsInStorage = [...productsInStorage, ...productArray];
+      const productArrayToString = JSON.stringify(productsInStorage);
+      window.localStorage.setItem(storageName, productArrayToString);
     }
-
-    window.localStorage.setItem(storageName, arrayToString);
   };
 
   const goToItemSelection = () => {
@@ -164,7 +169,7 @@ function Cart({ barcode64, createTicket }) {
       payload: productArray,
     });
 
-    history.push("/mainPage");
+    history.replace("/mainPage");
   };
 
   const openTicket = () => {
@@ -175,7 +180,7 @@ function Cart({ barcode64, createTicket }) {
   };
 
   return (
-    <Grid className={classes.fullScreen}>
+    <Grid container>
       <Box mt={2} mb={2}>
         <Grid container direction="row">
           <Button onClick={() => goToItemSelection()}>
@@ -251,6 +256,7 @@ function Cart({ barcode64, createTicket }) {
               </Grid>
 
               <Button
+                className={classes.removeButton}
                 variant="contained"
                 color="secondary"
                 onClick={() => removeAll()}
